@@ -8,9 +8,17 @@ ENV BACULA_KEY 5cee4d079821e
 
 ENV EMAIL contato@wethinksolutions.com.br
 
+RUN echo "plugins = 1" >> /etc/yum.conf
+
+RUN yum -y install wget
+
+RUN wget -c \
+	https://raw.githubusercontent.com/WeThinkSolutionsBR/bacula/master/docker/bacula-base/bacula-community.repo \
+	-O /etc/yum.repos.d/bacula-community.repo
+
 RUN rpm --import https://www.bacula.org/downloads/Bacula-4096-Distribution-Verification-key.asc
 
-COPY bacula-community.repo /etc/yum.repos.d/bacula-community.repo
+#COPY bacula-community.repo /etc/yum.repos.d/bacula-community.repo
 
 RUN sed -i s/BACULA_VERSION/$(echo $BACULA_VERSION)/g /etc/yum.repos.d/bacula-community.repo \
   && sed -i s/BACULA_KEY/$(echo $BACULA_KEY)/g /etc/yum.repos.d/bacula-community.repo
