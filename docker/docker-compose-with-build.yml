@@ -1,0 +1,72 @@
+version: '3.1'
+#
+services:
+
+  base: 
+    build: bacula-base/
+    image: wethinksolutionsbr/bacula-base:latest
+#    
+  db:
+    build: bacula-catalog/
+    image: wethinksolutionsbr/bacula-catalog:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: bacula
+      POSTGRES_USER: bacula
+      POSTGRES_DB: bacula
+    # volumes:
+    #   - pgdata:/var/lib/postgresql/data:rw
+    ports:
+      - 5432:5432
+#
+  bacula-dir:
+    build: bacula-dir/
+    image: wethinksolutionsbr/bacula-director:latest
+    restart: unless-stopped
+    volumes:
+      - ./etc:/opt/bacula/etc:ro
+    depends_on: 
+      - db      
+    ports:
+      - 9101:9101
+#
+  bacula-sd:
+    build: bacula-sd/
+    image: wethinksolutionsbr/bacula-storage:latest
+    restart: unless-stopped
+    depends_on:
+      - bacula-dir
+      - db
+    volumes:
+      - ./etc:/opt/bacula/etc:ro
+    ports:
+      - 9103:9103
+#
+  bacula-fd:
+    build: bacula-fd/
+    image: wethinksolutionsbr/bacula-client:latest
+    restart: unless-stopped
+    depends_on:
+      - bacula-sd
+      - bacula-dir
+    volumes:
+      - ./etc:/opt/bacula/etc:ro
+    ports:
+      - 9102:9102
+#
+  baculum:
+    build: baculum/
+    image: wethinksolutionsbr/baculum:latest
+    restart: unless-stopped
+    depends_on: 
+      - db
+      - bacula-dir
+    volumes:
+      - ./etc/bconsole.conf:/opt/bacula/etc/bconsole.conf:ro
+      - ./etc/baculum:/etc/baculum:rw
+    ports:
+      - 9095:9095
+      - 9096:9096
+# 
+#volumes: 
+#  pgdata:
