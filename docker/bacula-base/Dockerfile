@@ -31,4 +31,4 @@ RUN yum install -y bacula-postgresql --exclude=bacula-mysql
 
 RUN yum -y clean all && rm -rf /var/cache/yum
 
-RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done 
+RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done
