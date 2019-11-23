@@ -20,7 +20,7 @@ Realiza o deploy da imagem customizada do WeThink Enterprise Backup.
 
 ## Download e instalação do container WeThink Enterprise Backup
 
-	git clone https://github.com/fametec/bacula.git
+	git clone https://github.com/WeThinkSolutionsBR/bacula.git
 	cd bacula/docker
 	docker-compose up -d
 
