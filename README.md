@@ -4,10 +4,10 @@ Realiza o deploy da imagem customizada do WeThink Enterprise Backup.
 
 ## Imagens
 
-- [x] Catálogo	- wethinksolutionsbr/wt-bkp-catalog
-- [x] Director	- wethinksolutionsbr/wt-bkp-dir
-- [x] Storage	- wethinksolutionsbr/wt-bkp-sd
-- [x] Client	- wethinksolutionsbr/wt-bkp-fd
+- [x] Catálogo	- wethinksolutionsbr/bacula-catalog
+- [x] Director	- wethinksolutionsbr/bacula-director
+- [x] Storage	- wethinksolutionsbr/bacula-storage
+- [x] Client	- wethinksolutionsbr/bacula-client
 
 ## Instalação do Docker
 
@@ -20,13 +20,13 @@ Realiza o deploy da imagem customizada do WeThink Enterprise Backup.
 
 ## Download e instalação do container WeThink Enterprise Backup
 
-	git clone https://github.com/WeThinkSolutionsBR/WeThink-Enterprise-Backup.git
-	cd WeThink-Enterprise-Backup
+	git clone https://github.com/fametec/bacula.git
+	cd bacula/docker
 	docker-compose up -d
 
 ## Testes
 
-	docker exec -it wethinksolutions_wt-bkp-dir_1 bash
+	docker exec -it docker_bacula-dir_1 bash
 	> bconsole
 	*
 
