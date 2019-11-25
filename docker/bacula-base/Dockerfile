@@ -10,7 +10,7 @@ ENV EMAIL contato@wethinksolutions.com.br
 
 RUN echo "plugins = 1" >> /etc/yum.conf
 
-RUN yum -y install wget
+RUN yum -y install wget 
 
 RUN wget -c \
 	https://raw.githubusercontent.com/WeThinkSolutionsBR/bacula/master/docker/bacula-base/bacula-community.repo \
@@ -25,7 +25,9 @@ RUN sed -i s/BACULA_VERSION/$(echo $BACULA_VERSION)/g /etc/yum.repos.d/bacula-co
 
 RUN yum -y install \
 	zip \
-	bzip2
+	bzip2 \
+	which \
+	bc
 
 RUN yum install -y bacula-postgresql --exclude=bacula-mysql
 
