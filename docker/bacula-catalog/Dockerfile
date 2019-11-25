@@ -1,6 +1,6 @@
 FROM wethinksolutionsbr/bacula-base AS base
 
-FROM postgres:9.4
+FROM postgres:9.2
 
 MAINTAINER WeThink Solutions <contato@wethinksolutions.com.br>
 
