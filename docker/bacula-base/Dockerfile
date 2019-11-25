@@ -8,6 +8,10 @@ ENV BACULA_KEY 5cee4d079821e
 
 ENV EMAIL contato@wethinksolutions.com.br
 
+ENV TZ=America/Sao_Paulo
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN echo "plugins = 1" >> /etc/yum.conf
 
 RUN yum -y install wget 
