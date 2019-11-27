@@ -19,6 +19,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc:/opt/bacula/etc:ro
+      - ./home:/home:rw
+      - ./working:/opt/bacula/working:rw
     depends_on: 
       - db      
     ports:
@@ -32,6 +34,8 @@ services:
       - db
     volumes:
       - ./etc:/opt/bacula/etc:ro
+      - ./home:/home:rw
+      - ./working:/opt/bacula/working:rw
     ports:
       - 9103:9103
 #
@@ -43,6 +47,8 @@ services:
       - bacula-dir
     volumes:
       - ./etc:/opt/bacula/etc:ro
+      - ./home:/home:rw
+      - ./working:/opt/bacula/working:rw      
     ports:
       - 9102:9102
 #
