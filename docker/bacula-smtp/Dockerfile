@@ -1,22 +1,45 @@
-FROM wethinksolutionsbr/bacula-base AS base
+FROM centos:7
 
 MAINTAINER WeThink Solutions <contato@wethinksolutions.com.br>
 
-ENV EMAIL contato@wethinksolutions.com.br
+ENV MAIL_USER XXXXXX
 
-RUN yum install -y epel-release && yum update -y && \
-    yum install -y cyrus-sasl cyrus-sasl-plain cyrus-sasl-md5 mailx \
-    perl supervisor postfix rsyslog \
-    && rm -rf /var/cache/yum/* \
-    && yum clean all
+ENV MAIL_PASS XXXXXX
 
-RUN sed -i -e 's/inet_interfaces = localhost/inet_interfaces = all/g' /etc/postfix/main.cf
+ENV MAIL_HOST XXXXXX
 
-VOLUME ["/etc/postfix"]
+ENV MAIL_PORT 587
+
+RUN yum -y install postfix cyrus-sasl-plain mailx
+
+RUN { \
+        echo ; \
+        echo 'inet_interfaces = all' ; \
+        echo '#Set the relayhost' ; \
+        echo 'mydestination = localhost.localdomain, localhost' ; \
+        echo 'relayhost = [MAIL_HOST]:MAIL_PORT' ; \
+        echo 'smtp_sasl_auth_enable = yes' ; \
+        echo 'smtp_sasl_password_maps = static:MAIL_USER:MAIL_PASS' ; \
+        echo 'smtp_sasl_security_options = noanonymous' ; \
+        echo ; \
+        echo '# TLS support' ; \
+        echo 'smtp_tls_CAfile = /etc/pki/tls/certs/ca-bundle.crt' ; \
+        echo 'smtp_tls_security_level = may' ; \
+        echo 'smtpd_tls_security_level = may' ; \
+        echo 'smtp_tls_note_starttls_offer = yes' ; \
+        echo ; \
+        echo 'smtp_cname_overrides_servername=no' ; \
+        echo ; \
+    } >> /etc/postfix/main.cf
+
 
 RUN { \
         echo '#!/bin/bash' ; \
         echo ; \
+        echo 'sed -i s/MAIL_USER/$MAIL_USER/g /etc/postfix/main.cf' ; \
+        echo 'sed -i s/MAIL_PASS/$MAIL_PASS/g /etc/postfix/main.cf' ; \
+        echo 'sed -i s/MAIL_HOST/$MAIL_HOST/g /etc/postfix/main.cf' ; \
+	echo 'sed -i s/MAIL_PORT/$MAIL_PORT/g /etc/postfix/main.cf' ; \
         echo 'postfix start' ; \
         echo ; \
         echo 'while true; do' ;\
@@ -24,9 +47,8 @@ RUN { \
         echo '  sleep 10' ; \
         echo 'done' ; \
         echo ; \
-    } > /run.sh && chmod +x /run.sh
+    } > /entrypoint.sh && chmod +x /entrypoint.sh
 
+EXPOSE 25
 
-EXPOSE 25/tcp
-
-CMD [ "/run.sh" ]
+CMD [ "/entrypoint.sh" ]
