@@ -14,9 +14,19 @@ RUN sed -i -e 's/inet_interfaces = localhost/inet_interfaces = all/g' /etc/postf
 
 VOLUME ["/etc/postfix"]
 
+RUN { \
+        echo '#!/bin/bash' ; \
+        echo ; \
+        echo 'postfix start' ; \
+        echo ; \
+        echo 'while true; do' ;\
+        echo '  mailq ' ; \
+        echo '  sleep 10' ; \
+        echo 'done' ; \
+        echo ; \
+    } > /run.sh && chmod +x /run.sh
+
+
 EXPOSE 25
 
-ENTRYPOINT ["bacula-smtp"]
-
-CMD ["postfix"]
-
+CMD [ "/run.sh" ]
