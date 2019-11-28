@@ -27,6 +27,6 @@ RUN { \
     } > /run.sh && chmod +x /run.sh
 
 
-EXPOSE 25
+EXPOSE 25/tcp
 
 CMD [ "/run.sh" ]
