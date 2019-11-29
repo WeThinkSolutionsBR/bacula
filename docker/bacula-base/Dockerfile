@@ -31,7 +31,8 @@ RUN yum -y install \
 	zip \
 	bzip2 \
 	which \
-	bc
+	bc \
+	cronie
 
 RUN yum install -y bacula-postgresql --exclude=bacula-mysql
 
@@ -61,3 +62,5 @@ RUN { \
 RUN yum -y clean all && rm -rf /var/cache/yum
 
 RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done
+
+RUN ln -s /opt/bacula/etc/crontab /etc/crontab
