@@ -35,6 +35,18 @@ RUN yum -y install \
 
 RUN yum install -y bacula-postgresql --exclude=bacula-mysql
 
+RUN yum install -y perl-DBD-Pg
+
+RUN wget -c \
+	https://download-ib01.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+	-O /tmp/epel-release-latest-7.noarch.rpm
+
+RUN rpm -Uvh /tmp/epel-release-latest-7.noarch.rpm
+
+RUN yum install -y yum install perl-HTML-Template perl-MIME-Lite
+
+RUN rm -f /tmp/epel-release-latest-7.noarch.rpm
+
 RUN yum -y clean all && rm -rf /var/cache/yum
 
 RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done
