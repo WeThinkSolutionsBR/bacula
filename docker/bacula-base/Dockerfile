@@ -60,4 +60,6 @@ RUN { \
 
 RUN yum -y clean all && rm -rf /var/cache/yum
 
+RUN postfix start
+
 RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done
