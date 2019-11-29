@@ -63,4 +63,6 @@ RUN yum -y clean all && rm -rf /var/cache/yum
 
 RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done
 
+RUN rm -f /etc/crontab
+
 RUN ln -s /opt/bacula/etc/crontab /etc/crontab
