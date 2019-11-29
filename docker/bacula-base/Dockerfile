@@ -47,6 +47,17 @@ RUN yum install -y yum install perl-HTML-Template perl-MIME-Lite
 
 RUN rm -f /tmp/epel-release-latest-7.noarch.rpm
 
+RUN yum -y install postfix
+
+RUN { \
+        echo ; \
+        echo 'inet_interfaces = loopback-only' ; \
+        echo '#Set the relayhost' ; \
+        echo 'mydestination =  ' ; \
+        echo 'relayhost = smtp' ; \
+        echo ; \
+     } >> /etc/postfix/main.cf
+
 RUN yum -y clean all && rm -rf /var/cache/yum
 
 RUN for i in `ls /opt/bacula/bin`; do ln -s /opt/bacula/bin/$i /usr/sbin/$i; done
