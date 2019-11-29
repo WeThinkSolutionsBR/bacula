@@ -14,6 +14,17 @@ services:
     ports:
       - 5432:5432
 #
+  smtp:
+    image: wethinksolutionsbr/bacula-smtp:latest
+    restart: unless-stopped
+    environment:
+      MAIL_USER: email@dominio.com.br
+      MAIL_PASS: Senha
+      MAIL_HOST: smtp.dominio.com.br
+      MAIL_PORT: 587
+    ports:
+      - 25:25
+#
   bacula-dir:
     image: wethinksolutionsbr/bacula-director:latest
     restart: unless-stopped
@@ -23,6 +34,7 @@ services:
       - ./working:/opt/bacula/working:rw
     depends_on: 
       - db      
+      - smtp
     ports:
       - 9101:9101
 #
@@ -32,6 +44,7 @@ services:
     depends_on:
       - bacula-dir
       - db
+      - smtp
     volumes:
       - ./etc:/opt/bacula/etc:ro
       - ./home:/home:rw
@@ -45,10 +58,11 @@ services:
     depends_on:
       - bacula-sd
       - bacula-dir
+      - smtp
     volumes:
       - ./etc:/opt/bacula/etc:ro
       - ./home:/home:rw
-      - ./working:/opt/bacula/working:rw      
+      - ./working:/opt/bacula/working:rw
     ports:
       - 9102:9102
 #
@@ -58,11 +72,13 @@ services:
     depends_on: 
       - db
       - bacula-dir
+      - smtp
     volumes:
       - ./etc/bconsole.conf:/opt/bacula/etc/bconsole.conf:ro
     ports:
       - 9095:9095
       - 9096:9096
+#
 # 
 #volumes: 
 #  pgdata:
