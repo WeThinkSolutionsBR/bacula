@@ -10,4 +10,6 @@ EXPOSE 9101/tcp
 
 ENTRYPOINT ["bacula-dir"]
 
+RUN postfix start
+
 CMD ["-f", "-c", "/opt/bacula/etc/bacula-dir.conf"]
